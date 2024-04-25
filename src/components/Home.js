@@ -1,6 +1,7 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
+
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from "react-router-dom";
 import { hotelRooms } from "./HotelRooms";
 import {
   faBed,
@@ -14,6 +15,7 @@ import {
 function Home() {
   const [searchInput, setSearchInput] = useState("");
   const [sortByPrice, setSortByPrice] = useState("");
+  const navigate = useNavigate();
 
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
@@ -21,6 +23,11 @@ function Home() {
 
   const handleSortByPriceChange = (e) => {
     setSortByPrice(e.target.value);
+  };
+
+  const handleBookButtonClick = (room) => {
+    
+    navigate("/booking", { state: { roomData: room } });
   };
 
   const filteredAndSortedRooms = hotelRooms
@@ -72,7 +79,7 @@ function Home() {
           </div>
         </div>
         <div className="container">
-          <div className="text-center wow fadeInUp" >
+          <div className="text-center wow fadeInUp">
             <h6 className="section-title text-center text-primary text-uppercase">
               Our Rooms
             </h6>
@@ -83,11 +90,7 @@ function Home() {
           </div>
           <div className="row g-4">
             {filteredAndSortedRooms.map((room) => (
-              <div
-                key={room.id}
-                className="col-lg-4 col-md-6 wow fadeInUp"
-                
-              >
+              <div key={room.id} className="col-lg-4 col-md-6 wow fadeInUp">
                 <div className="room-item shadow rounded overflow-hidden">
                   <div className="position-relative">
                     <img
@@ -157,12 +160,12 @@ function Home() {
                     </p>
 
                     <div className="d-flex justify-content-end">
-                      <a
+                      <button
                         className="btn btn-sm btn-dark rounded py-2 px-4"
-                        href="#"
+                        onClick={() => handleBookButtonClick(room)}
                       >
                         Book Now
-                      </a>
+                      </button>
                     </div>
                   </div>
                 </div>

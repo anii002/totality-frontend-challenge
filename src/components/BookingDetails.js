@@ -1,111 +1,102 @@
-/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import swal from 'sweetalert';
 
-function BookingForm() {
-  const [cart, setCart] = useState([]);
-  const [propertyDetails, setPropertyDetails] = useState("");
+function BookingDetails() {
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
+  const [cart, setCart] = useState([]); // State to hold cart data
+  const [error, setError] = useState(""); // State to hold validation error
+  const location = useLocation();
+  const { roomData } = location.state;
+  const navigate = useNavigate();
 
-  // Function to calculate the cost of booking based on check-in and check-out dates
-  const calculateCost = (checkIn, checkOut) => {
-    // Dummy cost calculation logic here
-    const nightlyRate = 100; // Dummy nightly rate
-    const duration = Math.ceil((new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24)); // Calculate duration in days
-    return nightlyRate * duration;
-  };
+  const handleAddToCart = () => {
+    if (!checkInDate || !checkOutDate) {
+      setError("check-in or check-out dates are required.");
+      return;
+    }
 
-  // Function to add a booking to the cart
-  const addToCart = () => {
-    const newBooking = {
-      propertyDetails: propertyDetails,
+    if (new Date(checkOutDate) <= new Date(checkInDate)) {
+      setError("Check-out date must be after check-in date.");
+      return;
+    }
+
+    const booking = {
+      roomData: roomData,
       checkInDate: checkInDate,
       checkOutDate: checkOutDate,
-      cost: calculateCost(checkInDate, checkOutDate),
+      totalPrice: roomData.price,
+      roomimage: roomData.imageSrc
     };
-    setCart([...cart, newBooking]);
-    setPropertyDetails("");
-    setCheckInDate("");
-    setCheckOutDate("");
-  };
-
-  // Function to remove a booking from the cart
-  const removeFromCart = (index) => {
-    const updatedCart = [...cart];
-    updatedCart.splice(index, 1);
-    setCart(updatedCart);
-  };
-
-  // Function to calculate total cost of all bookings in the cart
-  const calculateTotalCost = () => {
-    let total = 0;
-    cart.forEach((booking) => {
-      total += booking.cost;
-    });
-    return total;
-  };
-
-  // Function to handle checkout process
-  const handleCheckout = () => {
-    // Placeholder for checkout process
-    alert("Checkout functionality will be implemented later.");
+    setCart([...cart, booking]);
+    swal("Cart Item!!")
+    navigate("/cart", { state: { cart: [...cart, booking] } });
   };
 
   return (
     <div className="container-xxl bg-white p-0">
-      {/* Booking Start */}
       <div className="container-xxl py-5">
         <div className="container">
-          <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
+          <div className="text-center">
             <h6 className="section-title text-center text-primary text-uppercase">
               Room Booking
             </h6>
             <h1 className="mb-5">
-              Book A{" "}
+              Book A
               <span className="text-primary text-uppercase">Luxury Room</span>
             </h1>
           </div>
-          <div className="row g-5">
+          <div className="d-flex  flex-wrap justify-content-center gap-2">
             <div className="col-lg-6">
               <div className="row g-3">
-                <img
-                  src="https://via.placeholder.com/800x400"
-                  alt="Placeholder Image"
-                />
+                <img src={roomData.imageSrc} alt="Room" />
               </div>
             </div>
-            <div className="col-lg-6">
-              <div className="wow fadeInUp" data-wow-delay="0.2s">
+            <div className="col-lg-3 border">
+              <div className="p-4 ">
                 <form>
-                  <div className="row g-3">
-                    <label htmlFor="property">Property Details:</label>
+                  <div className="row g-2">
+                    <h6 className="font-weight-normal">
+                      Property Details:
+                      <span className="text-truncat font-weight-bold mx-2">
+                        {roomData.name}
+                      </span>
+                    </h6>
+
+                    <label className="mb-1" htmlFor="checkOut">
+                      Check-In Date:
+                    </label>
                     <input
-                      type="text"
-                      id="property"
-                      name="property"
-                      value={propertyDetails}
-                      onChange={(e) => setPropertyDetails(e.target.value)}
-                    />
-                    <label htmlFor="checkIn">Check-In Date:</label>
-                    <input
+                      className="m-0 border rounded"
                       type="date"
                       id="checkIn"
                       name="checkIn"
                       value={checkInDate}
                       onChange={(e) => setCheckInDate(e.target.value)}
                     />
-                    <label htmlFor="checkOut">Check-Out Date:</label>
+                    <label className="mb-1" htmlFor="checkOut">
+                      Check-Out Date:
+                    </label>
                     <input
+                      className="m-0 border rounded "
                       type="date"
                       id="checkOut"
                       name="checkOut"
                       value={checkOutDate}
                       onChange={(e) => setCheckOutDate(e.target.value)}
                     />
+                    {error && <p className="text-danger m-0">{error}</p>}
+                    <h6 className="mt-2">
+                      Total Price:
+                      <span className="text-truncat font-weight-bold bg-light rounded px-2">
+                        {roomData.price}
+                      </span>
+                    </h6>
                     <button
                       type="button"
-                      className="btn btn-primary"
-                      onClick={addToCart}
+                      className="btn btn-primary mt-4"
+                      onClick={handleAddToCart}
                     >
                       Add to Cart
                     </button>
@@ -116,60 +107,8 @@ function BookingForm() {
           </div>
         </div>
       </div>
-      {/* Booking End */}
-
-      {/* Cart Section */}
-      <div className="container py-5">
-        <h2 className="mb-4">Cart</h2>
-        <div className="row">
-          <div className="col-md-8">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title">Booked Properties</h5>
-                <div className="list-group">
-                  {cart.map((booking, index) => (
-                    <div key={index} className="list-group-item">
-                      <div className="d-flex justify-content-between">
-                        <h6 className="mb-0">{booking.propertyDetails}</h6>
-                        <p className="mb-0">
-                          {booking.checkInDate} - {booking.checkOutDate}
-                        </p>
-                      </div>
-                      <p className="mb-0">Total: ${booking.cost}</p>
-                      <button
-                        className="btn btn-danger btn-sm mt-2"
-                        onClick={() => removeFromCart(index)}
-                      >
-                        Remove
-                      </button>
-                      </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title">Summary</h5>
-                <div>
-                  <p>Total Properties: {cart.length}</p>
-                  <p>Total Cost: ${calculateTotalCost()}</p>
-                  <button
-                    className="btn btn-primary w-100"
-                    onClick={handleCheckout}
-                  >
-                    Checkout
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* Cart Section End */}
     </div>
   );
 }
 
-export default BookingForm;
+export default BookingDetails;
