@@ -5,8 +5,8 @@ import swal from 'sweetalert';
 function BookingDetails() {
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
-  const [cart, setCart] = useState([]); // State to hold cart data
-  const [error, setError] = useState(""); // State to hold validation error
+  const [cart, setCart] = useState([]); 
+  const [error, setError] = useState("");
   const location = useLocation();
   const { roomData } = location.state;
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ function BookingDetails() {
 
   return (
     <div className="container-xxl bg-white p-0">
-      <div className="container-xxl py-5">
+      <div className="container-xxl py-2">
         <div className="container">
           <div className="text-center">
             <h6 className="section-title text-center text-primary text-uppercase">

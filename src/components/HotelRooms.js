@@ -6,7 +6,7 @@ import room3 from "../images/room-3.jpg"
 export  const hotelRooms = [
     {
       id: 1,
-      name: "Junior Suite",
+      name: "Govind Guest House",
       price: "₹1000/Night",
       imageSrc: room1,
       beds: 3,
@@ -45,7 +45,7 @@ export  const hotelRooms = [
     },
     {
       id: 4,
-      name: "Suite",
+      name: "Hotel Inn",
       price: "₹1500/Night",
       imageSrc: room3,
       beds: 4,
@@ -58,7 +58,7 @@ export  const hotelRooms = [
     },
     {
       id: 5,
-      name: "Suite",
+      name: "Luxary Room",
       price: "₹1000/Night",
       imageSrc: room2,
       beds: 4,

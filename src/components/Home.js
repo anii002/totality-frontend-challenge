@@ -48,7 +48,7 @@ function Home() {
 
   return (
     <div className="container-xxl bg-white p-0">
-      <div className="container-xxl py-5">
+      <div className="container-xxl py-2">
         <div className="container d-flex flex-wrap justify-content-between align-items-center">
           <div className="d-flex align-items-center mt-4">
             <div className="position-relative">
@@ -79,7 +79,7 @@ function Home() {
           </div>
         </div>
         <div className="container">
-          <div className="text-center wow fadeInUp">
+          <div className="text-center ">
             <h6 className="section-title text-center text-primary text-uppercase">
               Our Rooms
             </h6>
@@ -90,7 +90,7 @@ function Home() {
           </div>
           <div className="row g-4">
             {filteredAndSortedRooms.map((room) => (
-              <div key={room.id} className="col-lg-4 col-md-6 wow fadeInUp">
+              <div key={room.id} className="col-lg-4 col-md-6 ">
                 <div className="room-item shadow rounded overflow-hidden">
                   <div className="position-relative">
                     <img
